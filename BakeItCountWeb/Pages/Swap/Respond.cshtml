@@ -1,0 +1,102 @@
+﻿@page "{swapId:int}"
+@model BakeItCountWeb.Pages.Swap.RespondModel
+@{
+}
+<h1 class="font-bungeeInline text-6xl text-center text-cocoa"> SOLICITAÇÃO DE TROCA</h1>
+<div class="mx-auto my-10">
+    <div class="flex my-4 gap-6 justify-center max-w-4xl mx-auto">
+        <div class="border-3 border-cocoa rounded-xl w-96 my-2 shadow-solid-cocoa p-4 text-2xl font-bold text-cocoa mx-auto">
+            <dl class="divide-y divide-peach-light my-2">
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 text-2xl font-bungee">
+                    <dt> @Model.SourceSchedule.WeekRef.ToString("dd/MM/yyyy") </dt>
+                </div>
+            </dl>
+            <dl class="divide-y divide-peach-light my-2">
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt>Dupla:</dt>
+                    <dd> @Model.SourceSchedule.Pair.User1.Name e @Model.SourceSchedule.Pair.User2.Name</dd>
+                </div>
+            </dl>
+            <dl class="divide-y divide-peach-light my-2">
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt>Status: </dt>
+                    <dd> Solicitando troca</dd>
+                </div>
+            </dl>
+        </div>
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-10 text-cocoa my-auto">
+            <path fill-rule="evenodd" d="M15.97 2.47a.75.75 0 0 1 1.06 0l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.22-3.22H7.5a.75.75 0 0 1 0-1.5h11.69l-3.22-3.22a.75.75 0 0 1 0-1.06Zm-7.94 9a.75.75 0 0 1 0 1.06l-3.22 3.22H16.5a.75.75 0 0 1 0 1.5H4.81l3.22 3.22a.75.75 0 1 1-1.06 1.06l-4.5-4.5a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+        </svg>
+
+        <div class="border-3 border-cocoa rounded-xl w-96 my-2 p-4 shadow-solid-cocoa text-2xl font-bold text-cocoa mx-auto">
+            <dl class="divide-y divide-mint-light my-2">
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 text-2xl font-bungee">
+                    <dt> @Model.TargetSchedule.WeekRef.ToString("dd/MM/yyyy")  </dt>
+                </div>
+            </dl>
+            <dl class="divide-y divide-mint-light my-2">
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt>Dupla:</dt>
+                    <dd>@Model.TargetSchedule.Pair.User1.Name e @Model.TargetSchedule.Pair.User2.Name</dd>
+                </div>
+            </dl>
+            <dl class="divide-y divide-mint-light my-2">
+                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt>Stauts: </dt>
+                    <dd> Respondendo troca</dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    @if (Model.TargetSchedule.Pair.UserId1 == Model.CurrentUser.UserId || Model.TargetSchedule.Pair.UserId2 == Model.CurrentUser.UserId)
+    {
+        <div class="my-20 mx-auto text-center">
+            <form method="post">
+                <input type="hidden" name="SwapId" value="@Model.SwapRequest.SwapId" />
+                <input type="hidden" name="RespondingUserId" value="@Model.CurrentUser.UserId" />
+
+                <button type="submit" name="Approve" value="false"
+                        class="bg-peach text-beige rounded-2xl font-bungee px-4 py-2 text-4xl mx-2
+                   hover:bg-peach-light hover:text-beige cursor-pointer">
+                    REJEITAR
+                </button>
+
+                <button type="submit" name="Approve" value="true"
+                        class="bg-mint text-beige rounded-2xl font-bungee px-4 py-2 text-4xl mx-2
+                   hover:bg-mint-light hover:text-beige cursor-pointer">
+                    ACEITAR
+                </button>
+            </form>
+        </div>
+        <p class="flex text-2xl font-semibold text-peach border-peach border-3 bg-beige p-4 rounded-2xl gap-2 mx-auto max-w-4xl">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-10">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+            Atenção! Ao aceitar a troca, você e sua dupla serão responsáveis pelo sagrado bolo dessa semana.
+        </p>
+    }
+    else if (Model.SourceSchedule.Pair.UserId1 == Model.CurrentUser.UserId || Model.SourceSchedule.Pair.UserId2 == Model.CurrentUser.UserId)
+    {
+        <div class="my-20 mx-auto text-center">
+            <form method="post">
+                <input type="hidden" name="SwapId" value="@Model.SwapRequest.SwapId" />
+                <input type="hidden" name="RespondingUserId" value="@Model.CurrentUser.UserId" />
+
+                <button type="submit" name="Approve" value="false"
+                        class="bg-peach text-beige rounded-2xl font-bungee px-4 py-2 text-4xl mx-2
+                   hover:bg-peach-light hover:text-beige cursor-pointer">
+                    CANCELAR TROCA
+                </button>
+            </form>
+        </div>
+        <p class="flex text-2xl font-semibold text-peach border-peach border-3 bg-beige p-4 rounded-2xl gap-2 mx-auto max-w-4xl">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-10">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+            Atenção! Ao cancelar a troca, você e sua dupla serão responsáveis pelo sagrado bolo dessa semana.
+        </p>
+    }
+
+</div>

@@ -1,0 +1,37 @@
+﻿@page "/swap/create/{scheduleId}"
+@model BakeItCountWeb.Pages.Swap.CreateModel
+@{
+}
+
+<div class="mx-auto my-10">
+    <h1 class="font-bungee text-peach text-4xl text-center"> DUPLA DA SEMANA </h1>
+
+    <div class="border-4 border-peach rounded-2xl flex flex-col font-bold text-peach text-2xl text-center p-4 max-w-2xl mx-auto my-4 shadow-solid-peach">
+        <span> @Model.Pair.User1.Name</span>
+        <span> & </span>
+        <span> @Model.Pair.User2.Name</span>
+    </div>
+
+    <div class="mx-auto my-10">
+        <h1 class="font-bungeeInline text-4xl text-left text-cocoa"> Trocar com: </h1>
+        <form method="post">
+            <ul class="font-bungee text-2xl flex flex-col gap-4 text-cocoa my-10">
+                @foreach (var pair in Model.PairsList)
+                {
+                    <li class="flex items-center gap-2">
+                        <input type="radio" name="TargetScheduleId" value="@pair.NextScheduleId" required />
+                        <span>@pair.User1.Name & @pair.User2.Name</span>
+                    </li>
+                }
+            </ul>
+
+            <input type="hidden" name="SourceScheduleId" value="@Model.Schedule.ScheduleId" />
+            <input type="hidden" name="RequestingUserId" value="@Model.CurrentUser.UserId" />
+
+            <button type="submit" class="bg-peach text-beige rounded-2xl font-bungee px-6 py-3 mt-8 hover:bg-peach-light hover:text-beige cursor-pointer">
+                Enviar solicitação
+            </button>
+        </form>
+    </div>
+
+</div>

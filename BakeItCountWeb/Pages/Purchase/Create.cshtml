@@ -1,0 +1,95 @@
+﻿@page "/purchase/create/{scheduleId}"
+@model BakeItCountWeb.Pages.Purchase.CreateModel
+@{
+}
+<div class="mx-auto my-10">
+    <h1 class="font-bungeeInline text-6xl text-left text-cocoa"> REGISTRAR COMPRA </h1>
+    <div class="flex gap-4 font-bungee text-4xl text-left text-peach">
+        <h2 class="flex my-4 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+            </svg>
+
+            @Model.Schedule.WeekRef.ToString("dd/MM/yyyy")
+        </h2>
+        <h2 class="flex my-4 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+            </svg>
+
+            @Model.Schedule.Pair.User1.Name & @Model.Schedule.Pair.User2.Name
+        </h2>
+    </div>
+
+    <form method="post">
+        <div class="my-4">
+            <label for="PurchaseDate" class="block text-xl font-medium text-cocoa font-bungee">Data da Compra</label>
+            <input id="PurchaseDate" name="PurchaseDate" type="datetime-local"
+                   value="@Model.Schedule.WeekRef.ToString("yyyy-MM-ddTHH:mm")"
+                   class="mt-1 block  rounded-2xl p-2 border-2 border-cocoa focus:border-mint focus:ring focus:ring-mint-light text-xl text-cocoa bg-beige" />
+            <span class="text-peach text-xl">
+                @if (ViewData.ModelState["PurchaseDate"]?.Errors.Count > 0)
+                {
+                    @ViewData.ModelState["PurchaseDate"].Errors[0].ErrorMessage
+                }
+            </span>
+        </div>
+
+        <div class="my-4">
+            <label for="Flavor1Id" class="block text-xl font-medium text-cocoa font-bungee">Sabor 1</label>
+            <select id="Flavor1Id" name="Flavor1Id"
+                    class="mt-1 block  rounded-2xl p-2 border-2 border-cocoa focus:border-mint focus:ring focus:ring-mint-light text-xl text-cocoa bg-beige">
+                <option value="">Selecione um sabor</option>
+                @foreach (var flavor in Model.Flavors)
+                {
+                    <option value="@flavor.FlavorId">@flavor.Name</option>
+                }
+            </select>
+            <span class="text-red-500 text-sm">
+                @if (ViewData.ModelState["Flavor1Id"]?.Errors.Count > 0)
+                {
+                    @ViewData.ModelState["Flavor1Id"].Errors[0].ErrorMessage
+                }
+            </span>
+        </div>
+
+        <div class="my-4">
+            <label for="Flavor2Id" class="block text-xl font-medium text-cocoa font-bungee">Sabor 2</label>
+            <select id="Flavor2Id" name="Flavor2Id"
+                    class="mt-1 block  rounded-2xl p-2 border-2 border-cocoa focus:border-mint focus:ring focus:ring-mint-light text-xl text-cocoa bg-beige">
+                <option value="">Selecione um sabor</option>
+                @foreach (var flavor in Model.Flavors)
+                {
+                    <option value="@flavor.FlavorId">@flavor.Name</option>
+                }
+            </select>
+            <span class="text-red-500 text-sm">
+                @if (ViewData.ModelState["Flavor2Id"]?.Errors.Count > 0)
+                {
+                    @ViewData.ModelState["Flavor2Id"].Errors[0].ErrorMessage
+                }
+            </span>
+        </div>
+
+        <div class="my-4">
+            <label for="Notes" class="block text-xl font-medium text-cocoa font-bungee">Observações</label>
+            <textarea id="Notes" name="Notes" rows="3"
+                      class="mt-1 block w-96 rounded-2xl p-2 border-2 border-cocoa focus:border-mint focus:ring focus:ring-mint-light text-xl text-cocoa bg-beige"></textarea>
+            <span class="text-red-500 text-sm">
+                @if (ViewData.ModelState["Notes"]?.Errors.Count > 0)
+                {
+                    @ViewData.ModelState["Notes"].Errors[0].ErrorMessage
+                }
+            </span>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit"
+                    class="bg-mint text-beige rounded-2xl font-bungee px-4 py-2 text-4xl mx-2
+                  hover:bg-mint-light hover:text-beige cursor-pointer">
+                Salvar
+            </button>
+        </div>
+    </form>
+
+</div>

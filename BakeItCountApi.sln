@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BakeItCountApi", "BakeItCountApi\BakeItCountApi.csproj", "{CE112C1E-0FFC-4CA6-9753-8E3D5E738A41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BakeItCountWeb", "BakeItCountWeb\BakeItCountWeb.csproj", "{40C08DD7-FC39-4954-B437-C5B89898128B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{CDDD176C-AFAB-498D-B630-F7A80002EBE9}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE112C1E-0FFC-4CA6-9753-8E3D5E738A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE112C1E-0FFC-4CA6-9753-8E3D5E738A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE112C1E-0FFC-4CA6-9753-8E3D5E738A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE112C1E-0FFC-4CA6-9753-8E3D5E738A41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40C08DD7-FC39-4954-B437-C5B89898128B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C08DD7-FC39-4954-B437-C5B89898128B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C08DD7-FC39-4954-B437-C5B89898128B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40C08DD7-FC39-4954-B437-C5B89898128B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2DB471A5-2643-40E3-9D1F-BACD4DB5B80E}
+	EndGlobalSection
+EndGlobal

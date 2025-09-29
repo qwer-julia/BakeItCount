@@ -1,0 +1,30 @@
+﻿/* Forçar Tailwind a gerar classes personalizadas */
+@layer utilities {
+    .bg-beige {
+        background-color: theme('colors.beige');
+    }
+
+    .text-cocoa {
+        color: theme('colors.cocoa');
+    }
+
+    .text-peach {
+        color: theme('colors.peach');
+    }
+
+    .text-sand {
+        color: theme('colors.sand');
+    }
+
+    .bg-mint {
+        background-color: theme('colors.mint');
+    }
+
+    .font-bungeeShade {
+        font-family: theme('fontFamily.bungeeShade');
+    }
+
+    .font-bungeeInline {
+        font-family: theme('fontFamily.bungeeInline');
+    }
+}

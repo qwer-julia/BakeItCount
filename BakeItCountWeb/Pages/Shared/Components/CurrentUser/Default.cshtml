@@ -1,0 +1,41 @@
+﻿@model BakeItCountWeb.DTOs.UserDto?
+
+@if (Model != null)
+{
+    <nav class="flex container ">
+        <a class="text-cocoa font-bungeeShade text-6xl hover:text-cocoa my-10" href="/Authenticated">
+            BAKE IT COUNT.
+        </a>
+        <div class="ml-auto font-bungee flex gap-4 my-10">
+            <a class="text-cocoa border-cocoa border-3 rounded-2xl p-2 text-2xl hover:bg-cocoa hover:text-beige cursor-pointer" href="/purchase">
+                HISTÓRICO
+            </a>
+            <a class="text-cocoa border-cocoa border-3 rounded-2xl p-2 text-2xl hover:bg-cocoa hover:text-beige cursor-pointer" href="/ranking">
+                RANKING
+            </a>
+            <a class="text-beige border-mint border-3 rounded-2xl p-2 font-mint text-2xl bg-mint
+               hover:text-beige hover:bg-mint-light hover:border-mint-light cursor-pointer"
+               href="@($"/me")">
+                MEU PERFIL
+            </a>
+        </div>
+    </nav>
+}
+else
+{
+    <nav class="flex container ">
+        <a class="text-cocoa font-bungeeShade text-4xl hover:text-cocoa my-10" href="/">
+            BAKE IT COUNT.
+        </a>
+        <div class="ml-auto font-bungee flex gap-4 my-10">
+            <a class="text-cocoa border-cocoa border-3 rounded-2xl p-2 text-2xl hover:bg-cocoa hover:text-beige cursor-pointer" href="#">
+                CADASTRE-SE
+            </a>
+            <a class="text-beige border-mint border-3 rounded-2xl p-2 font-mint text-2xl bg-mint
+                      hover:text-beige hover:bg-mint-light hover:border-mint-light cursor-pointer"
+               href="/Login">
+                LOGIN
+            </a>
+        </div>
+    </nav>
+}

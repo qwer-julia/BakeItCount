@@ -1,0 +1,30 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+# Rider
+.idea/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Others
+*.dbmdl
+*.bak
+*.ldf
+*.mdf
+
+# Dotnet artifacts
+*.exe
+*.dll
+*.pdb
+
+# Configuração de ambiente local
+appsettings.Development.json

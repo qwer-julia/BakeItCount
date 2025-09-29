@@ -1,0 +1,148 @@
+﻿@page "/Authenticated"
+@model BakeItCountWeb.Pages.Home.AuthenticatedModel
+@{
+}
+
+<div class="mx-auto my-10">
+    <h1 class="font-bungee text-peach text-4xl text-center"> DUPLA DA SEMANA </h1>
+
+    <div class="border-4 border-peach rounded-2xl flex flex-col font-bold text-peach text-2xl text-center p-4 max-w-2xl mx-auto my-4 shadow-solid-peach">
+        <span> @Model.PairUser1.Name </span>
+        <span> & </span>
+        <span> @Model.PairUser2.Name</span>
+    </div>
+
+    @{
+        bool isUserInPair = Model.CurrentUser.UserId == Model.Pair.UserId1
+        || Model.CurrentUser.UserId == Model.Pair.UserId2;
+        bool isConfirmed = Model.NextSchedule?.Confirmed ?? false;
+    }
+
+    @if (isUserInPair && !isConfirmed)
+    {
+        <div class="my-20 mx-auto flex text-center ">
+            <a class="bg-peach text-beige rounded-2xl font-bungee px-4 py-2 text-4xl mx-2
+                  hover:bg-peach-light hover:text-beige cursor-pointer"
+               href="@($"swap/create/{Model.NextSchedule.ScheduleId}")">
+                TROCAR
+            </a>
+
+            <form method="post" asp-page-handler="ConfirmSchedule">
+                <input type="hidden" name="ScheduleId" value="@Model.NextSchedule.ScheduleId" />
+
+                <button type="submit"
+                        class="bg-cocoa text-beige rounded-2xl font-bungee px-4 py-2 text-4xl mx-2
+                           hover:bg-cocoa-light hover:text-beige cursor-pointer">
+                    CONFIRMAR
+                </button>
+            </form>
+        </div>
+    }
+    else if (isUserInPair && isConfirmed)
+    {
+        if (Model.PurchaseId == 0)
+        {
+            <div class="my-20 mx-auto text-center ">
+                <a class="bg-cocoa text-beige rounded-2xl font-bungee px-4 py-2 text-4xl mx-2
+                  hover:bg-cocoa-light hover:text-beige cursor-pointer" href="@($"purchase/create/{Model.NextSchedule.ScheduleId}")">
+                    REGISTRAR COMPRA
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="my-20 mx-auto text-center ">
+                <a class="bg-beige border-3 border-cocoa text-cocoa rounded-2xl font-bungee px-4 py-2 text-4xl mx-2
+                  hover:bg-cocoa hover:text-beige cursor-pointer" href="@($"purchase/{Model.PurchaseId}")">
+                    DETALHES DA COMPRA
+                </a>
+            </div>
+        }
+
+        <div class="bg-mint text-beige p-4 rounded-2xl mx-auto max-w-2xl my-20">
+            <div class="flex gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-10">
+                    <path d="m15 1.784-.796.795a1.125 1.125 0 1 0 1.591 0L15 1.784ZM12 1.784l-.796.795a1.125 1.125 0 1 0 1.591 0L12 1.784ZM9 1.784l-.796.795a1.125 1.125 0 1 0 1.591 0L9 1.784ZM9.75 7.547c.498-.021.998-.035 1.5-.042V6.75a.75.75 0 0 1 1.5 0v.755c.502.007 1.002.021 1.5.042V6.75a.75.75 0 0 1 1.5 0v.88l.307.022c1.55.117 2.693 1.427 2.693 2.946v1.018a62.182 62.182 0 0 0-13.5 0v-1.018c0-1.519 1.143-2.829 2.693-2.946l.307-.022v-.88a.75.75 0 0 1 1.5 0v.797ZM12 12.75c-2.472 0-4.9.184-7.274.54-1.454.217-2.476 1.482-2.476 2.916v.384a4.104 4.104 0 0 1 2.585.364 2.605 2.605 0 0 0 2.33 0 4.104 4.104 0 0 1 3.67 0 2.605 2.605 0 0 0 2.33 0 4.104 4.104 0 0 1 3.67 0 2.605 2.605 0 0 0 2.33 0 4.104 4.104 0 0 1 2.585-.364v-.384c0-1.434-1.022-2.7-2.476-2.917A49.138 49.138 0 0 0 12 12.75ZM21.75 18.131a2.604 2.604 0 0 0-1.915.165 4.104 4.104 0 0 1-3.67 0 2.605 2.605 0 0 0-2.33 0 4.104 4.104 0 0 1-3.67 0 2.605 2.605 0 0 0-2.33 0 4.104 4.104 0 0 1-3.67 0 2.604 2.604 0 0 0-1.915-.165v2.494c0 1.035.84 1.875 1.875 1.875h15.75c1.035 0 1.875-.84 1.875-1.875v-2.494Z" />
+                </svg>
+
+                <p class="text-xl font-bungee">
+                    Uhull, @(Model.PairUser1.Name) e @(Model.PairUser2.Name) confirmaram o bolo.
+                </p>
+            </div>
+        </div>
+    }
+    else if (isConfirmed)
+    {
+        <div class="bg-mint text-beige p-4 rounded-2xl mx-auto max-w-2xl my-20">
+            <div class="flex gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-10">
+                    <path d="m15 1.784-.796.795a1.125 1.125 0 1 0 1.591 0L15 1.784ZM12 1.784l-.796.795a1.125 1.125 0 1 0 1.591 0L12 1.784ZM9 1.784l-.796.795a1.125 1.125 0 1 0 1.591 0L9 1.784ZM9.75 7.547c.498-.021.998-.035 1.5-.042V6.75a.75.75 0 0 1 1.5 0v.755c.502.007 1.002.021 1.5.042V6.75a.75.75 0 0 1 1.5 0v.88l.307.022c1.55.117 2.693 1.427 2.693 2.946v1.018a62.182 62.182 0 0 0-13.5 0v-1.018c0-1.519 1.143-2.829 2.693-2.946l.307-.022v-.88a.75.75 0 0 1 1.5 0v.797ZM12 12.75c-2.472 0-4.9.184-7.274.54-1.454.217-2.476 1.482-2.476 2.916v.384a4.104 4.104 0 0 1 2.585.364 2.605 2.605 0 0 0 2.33 0 4.104 4.104 0 0 1 3.67 0 2.605 2.605 0 0 0 2.33 0 4.104 4.104 0 0 1 3.67 0 2.605 2.605 0 0 0 2.33 0 4.104 4.104 0 0 1 2.585-.364v-.384c0-1.434-1.022-2.7-2.476-2.917A49.138 49.138 0 0 0 12 12.75ZM21.75 18.131a2.604 2.604 0 0 0-1.915.165 4.104 4.104 0 0 1-3.67 0 2.605 2.605 0 0 0-2.33 0 4.104 4.104 0 0 1-3.67 0 2.605 2.605 0 0 0-2.33 0 4.104 4.104 0 0 1-3.67 0 2.604 2.604 0 0 0-1.915-.165v2.494c0 1.035.84 1.875 1.875 1.875h15.75c1.035 0 1.875-.84 1.875-1.875v-2.494Z" />
+                </svg>
+
+                <p class="text-xl font-bungee">
+                    Uhull, @(Model.PairUser1.Name) e @(Model.PairUser2.Name) confirmaram o bolo.
+                </p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="my-20 mx-auto text-center ">
+            <a class="bg-cocoa text-beige rounded-2xl font-bungee px-4 py-2 text-4xl mx-2
+                  hover:bg-cocoa-light hover:text-beige cursor-pointer">
+                VOTAR
+            </a>
+        </div>
+    }
+
+    @if (Model.SwapRequest.SwapId > 0
+    && (Model.SwapRequest.TargetSchedule?.Pair?.UserId1 == Model.CurrentUser.UserId
+    || Model.SwapRequest.TargetSchedule?.Pair?.UserId2 == Model.CurrentUser.UserId))
+    {
+        <div class="bg-peach text-beige p-4 rounded-2xl mx-auto max-w-2xl">
+            <div class="flex gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
+                    <path d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z" />
+                    <path fill-rule="evenodd" d="M12 2.25A6.75 6.75 0 0 0 5.25 9v.75a8.217 8.217 0 0 1-2.119 5.52.75.75 0 0 0 .298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 1 0 7.48 0 24.583 24.583 0 0 0 4.83-1.244.75.75 0 0 0 .298-1.205 8.217 8.217 0 0 1-2.118-5.52V9A6.75 6.75 0 0 0 12 2.25ZM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 0 0 4.496 0l.002.1a2.25 2.25 0 1 1-4.5 0Z" clip-rule="evenodd" />
+                </svg>
+
+                <p class="text-xl font-bungee"> Ei! Parece que @(Model.Pair.User1.Name) e @(Model.Pair.User2.Name) querem trocar a vez do bolo com você. </p>
+            </div>
+
+            <a href="@($"swap/respond/{Model.SwapRequest.SwapId}")" class="underline text-lg font-semibold">Clique para ver os detalhes e faça sua escolha! </a>
+        </div>
+    }
+
+</div>
+
+<div class="mx-auto my-10">
+    <h1 class="font-bungeeInline text-6xl text-left text-cocoa"> VOTAÇÃO </h1>
+    <p class="text-cocoa text-lg font-semibold text-left  mx-auto my-10">
+        E os sabores mais votados para essa semana é....
+    </p>
+    <ul class="my-10 text-xl font-bold flex flex-col gap-2 max-w-6xl">
+        <li class="py-2 px-6 border-cocoa border-2 rounded-full flex gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-peach">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle"
+                      font-size="10" fill="white" font-family="Arial">
+                    1
+                </text>
+            </svg>
+            <span class=" text-cocoa"> FOFINHO DE CHOCOLATE </span>
+            <span class=" text-mint ml-auto"> 6 VOTOS </span>
+        </li>
+        <li class="py-2 px-6 border-cocoa border-2 rounded-full flex gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 text-peach">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+                <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle"
+                      font-size="10" fill="white" font-family="Arial">
+                    2
+                </text>
+            </svg>
+            <span class=" text-cocoa"> MAÇÃ COM CASTANHAS </span>
+            <span class=" text-mint ml-auto"> 5 VOTOS </span>
+        </li>
+    </ul>
+    <a href="#" class="text-cocoa text-lg font-semibold text-left hover:text-mint mx-auto my-10 underline">Clique aqui e participe da votação</a>
+</div>

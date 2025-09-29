@@ -1,0 +1,35 @@
+﻿@page "/Login"
+@model BakeItCountWeb.Pages.Home.LoginModel
+@{
+   
+<div class="my-20">
+    <div class="text-xl p-5 mx-auto flex flex-col border-2 border-cocoa rounded-2xl gap-4 max-w-xl text-cocoa font-semibold">
+        <h1 class="text-4xl text-center font-bungeeInline text-cocoa"> login </h1>
+        <form method="post">
+            <div>
+                <p class="my-1"> E-mail </p>
+                <input asp-for="Email" class="border-2 border-cocoa rounded-lg p-2 w-full text-cocoa bg-beige" type="email" />
+                <span class="text-red-600 text-sm">@Html.ValidationMessageFor(m => m.Email)</span>
+            </div>
+            <div>
+                <p class="my-1"> Senha </p>
+                <input asp-for="Password" class="border-2 border-cocoa rounded-lg p-2 w-full bg-beige" type="password" />
+                <span class="text-red-600 text-sm">@Html.ValidationMessageFor(m => m.Password)</span>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <p class="text-red-600 font-semibold mt-2">@Model.ErrorMessage</p>
+            }
+
+            <div class="flex gap-2 w-full mt-4">
+                <button type="submit" class="w-full bg-beige p-2 rounded-xl border-2 border-mint text-mint font-bold hover:text-beige hover:bg-mint">
+                    Entrar
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+}
