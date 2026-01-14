@@ -1,4 +1,5 @@
 ﻿using BakeItCountApi.Cn.Enum;
+using BakeItCountApi.Cn.FlavorVotes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,10 +18,12 @@ namespace BakeItCountApi.Cn.Flavors
 
         public string Description { get; set; }
 
+        [NotMapped]
+        public int Votes { get; set; }
+
         [Required]
         public FlavorCategory Category { get; set; }
 
-        public int Votes { get; set; } = 0;
-
+        public ICollection<FlavorVote> FlavorVotes { get; set; }
     }
 }

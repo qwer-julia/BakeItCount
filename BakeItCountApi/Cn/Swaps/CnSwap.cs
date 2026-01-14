@@ -1,5 +1,4 @@
-﻿using BakeItCountApi.Dao.Swaps;
-using BakeItCountApi.Dao.Schedules;
+﻿using BakeItCountApi.Cn.Schedules;
 
 namespace BakeItCountApi.Cn.Swaps
 {

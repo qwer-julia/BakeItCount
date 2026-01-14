@@ -1,0 +1,27 @@
+﻿@page
+@model BakeItCountWeb.Pages.Achievement.IndexModel
+@{
+}
+
+<h1 class="text-6xl font-bungeeInline text-cocoa">CONQUISTAS</h1>
+<div class="grid grid-cols-2 gap-4 my-4">
+    @foreach (var achievement in Model.AchievementList)
+    {
+        <div class="p-14 border-3 border-cocoa shadow-solid-cocoa rounded-2xl max-w-2xl my-4">
+            <h1 class="text-6xl font-bungeeInline text-cocoa">@achievement.Name</h1>
+
+            <span class="my-2 font-bold text-2xl font-bungee flex text-peach">
+                @achievement.Description
+            </span>
+
+            <p class="my-10">
+                <h1 class="text-2xl font-bungee text-cocoa">REQUISITO</h1>
+
+                <span class="my-2 font-bold text-4xl font-bungee flex text-cocoa gap-2">
+                    @achievement.Criteria
+                </span>
+            </p>
+        </div>
+    }
+
+</div>

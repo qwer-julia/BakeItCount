@@ -23,6 +23,7 @@ namespace BakeItCountWeb.Pages.Home
         public UserDto PairUser1 { get; set; }
         public UserDto PairUser2 { get; set; }
         public SwapRequest SwapRequest { get; set; }
+        public List<FlavorDto> Flavors { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -33,6 +34,10 @@ namespace BakeItCountWeb.Pages.Home
             PairUser1 = await _httpClient.GetFromJsonAsync<UserDto>($"user/{Pair.UserId1}");
             PairUser2 = await _httpClient.GetFromJsonAsync<UserDto>($"user/{Pair.UserId2}");
             SwapRequest = await _httpClient.GetFromJsonAsync<SwapRequest>($"swap/getBySchedule/{NextSchedule.ScheduleId}") ?? null;
+            Flavors = (await _httpClient.GetFromJsonAsync<List<FlavorDto>>("flavor/allWithFlavors"))
+                .OrderByDescending(f => f.Votes) 
+                .Take(4)                        
+                .ToList();
 
             if (!Request.Cookies.TryGetValue("AuthToken", out var token))
             {

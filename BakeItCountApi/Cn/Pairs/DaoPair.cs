@@ -5,7 +5,7 @@ using BakeItCountApi.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace BakeItCountApi.Dao.Pairs
+namespace BakeItCountApi.Cn.Pairs
 {
     public class DaoPair
     {

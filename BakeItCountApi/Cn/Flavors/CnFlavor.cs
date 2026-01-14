@@ -19,11 +19,15 @@ namespace BakeItCountApi.Cn.Flavors
         {
             return await _flavorDAO.GetAllFlavorsAsync();
         }
+        public async Task<List<Flavor>> GetAllFlavorsWithVotesAsync()
+        {
+            return await _flavorDAO.GetAllFlavorsWithVotesAsync();
+        }
+
 
         public async Task<Flavor> GetMostPurchasedFlavorByUserAsync(int userId)
         {
             return await _flavorDAO.GetMostPurchasedFlavorByUserAsync(userId);
         }
-
     }
 }

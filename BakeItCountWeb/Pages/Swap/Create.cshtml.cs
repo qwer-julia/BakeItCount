@@ -35,13 +35,16 @@ namespace BakeItCountWeb.Pages.Swap
 
             if (response.IsSuccessStatusCode)
             {
+                var CurrentUser = await _httpClient.GetFromJsonAsync<UserDto>("auth/me");
+                await _httpClient.GetFromJsonAsync<List<AchievementDto>>($"achievement/UpdatePurchaseAchievementsByUserId/{CurrentUser.UserId}");
+
                 var createdSwap = await response.Content.ReadFromJsonAsync<SwapRequest>();
 
                 if (createdSwap != null)
                 {
                     SwapRequest.SwapId = createdSwap.SwapId;
 
-return RedirectToPage("/Swap/Respond", new { swapId = SwapRequest.SwapId });
+                    return RedirectToPage("/Swap/Respond", new { swapId = SwapRequest.SwapId });
                 }
             }
 

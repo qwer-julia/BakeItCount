@@ -905,8 +905,4 @@
     <TypeScriptCompile Include="node_modules\yallist\dist\esm\index.d.ts" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Flavor\" />
-  </ItemGroup>
-
 </Project>

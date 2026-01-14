@@ -2,19 +2,20 @@
 @model BakeItCountWeb.Pages.Purchase.IndexModel
 @{
 }
-<div class="mx-auto my-10">
-    <h1 class="font-bungeeInline text-6xl text-left text-cocoa"> Histórico </h1>
-    <div class="border-3 border-cocoa rounded-xl max-w-2xl my-10">
+<div class="mx-auto my-6 md:my-10 px-4 md:px-0">
+    <h1 class="font-bungeeInline text-4xl md:text-6xl text-left text-cocoa mb-6 md:mb-10"> Histórico </h1>
+
+    <!-- Desktop Table -->
+    <div class="hidden md:block border-3 border-cocoa rounded-xl max-w-2xl lg:max-w-4xl my-10">
         <table class="w-full mx-auto border-2 border-cocoa rounded-xl overflow-hidden text-cocoa">
             <thead class="bg-opacity-10 font-bold" style="background-color: rgba(92,64,51,0.06);">
                 <tr>
-                    <th class="px-4 py-3 text-left "> </th>
-                    <th class="px-4 py-3 text-left  ">DATA</th>
-                    <th class="px-4 py-3 text-left "> DUPLA</th>
-                    <th class="px-4 py-3 text-left "> SABORES</th>
+                    <th class="px-4 py-3 text-left"> </th>
+                    <th class="px-4 py-3 text-left">DATA</th>
+                    <th class="px-4 py-3 text-left">DUPLA</th>
+                    <th class="px-4 py-3 text-left">SABORES</th>
                 </tr>
             </thead>
-
             <tbody class="font-semibold">
                 @foreach (var purchase in Model.PurchasesList)
                 {
@@ -34,4 +35,41 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Mobile Cards -->
+    <div class="md:hidden flex flex-col gap-4">
+        @foreach (var purchase in Model.PurchasesList)
+        {
+            <div class="border-3 border-cocoa rounded-xl p-4 text-cocoa shadow-sm">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex-1">
+                        <p class="text-xs font-bold text-gray-500 uppercase mb-1">Data</p>
+                        <p class="text-base font-semibold">@purchase.Schedule.WeekRef.ToString("dd/MM/yyyy")</p>
+                    </div>
+                    <a href="@($"/purchase/{purchase.PurchaseId}")" class="text-mint ml-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8 hover:text-mint-light">
+                            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="mb-3">
+                    <p class="text-xs font-bold text-gray-500 uppercase mb-1">Dupla</p>
+                    <p class="text-sm font-semibold">@purchase.Schedule.Pair.User1.Name & @purchase.Schedule.Pair.User2.Name</p>
+                </div>
+
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase mb-1">Sabores</p>
+                    <p class="text-sm font-semibold">@purchase.Flavor1.Name e @purchase.Flavor2.Name</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!Model.PurchasesList.Any())
+    {
+        <div class="text-center text-cocoa py-10">
+            <p class="text-lg font-semibold">Nenhuma compra registrada ainda.</p>
+        </div>
+    }
 </div>

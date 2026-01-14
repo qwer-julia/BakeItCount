@@ -6,16 +6,16 @@ using Microsoft.IdentityModel.Tokens;
 using BakeItCountApi.Cn.Users;
 using BakeItCountApi.Cn.Login;
 using BakeItCountApi.Cn.Pairs;
-using BakeItCountApi.Dao.Pairs;
 using BakeItCountApi.Cn.Flavors;
 using BakeItCountApi.Cn.Purchases;
 using BakeItCountApi.Cn.Schedules;
-using BakeItCountApi.Dao.Purchases;
-using BakeItCountApi.Dao.Schedules;
-using BakeItCountApi.Dao.Swaps;
 using BakeItCountApi.Cn.Swaps;
 using BakeItCountApi.Cn.UserAchievements;
-
+using BakeItCountApi.Cn.Achievements;
+using BakeItCountApi.Cn.FlavorVotes;
+using BakeItCountApi.Models;
+using BakeItCountApi.Services;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,10 +28,12 @@ builder.Services.AddControllers()
     });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddEntityFrameworkNpgsql()
     .AddDbContext<Context>(options =>
-    options.UseNpgsql("Host=localhost;Port=5432;Pooling=true;Database=BakeItCountDatabase;User Id=postgres;Password=5822;"));
+    options.UseNpgsql(connectionString));
 
 // DAO
 builder.Services.AddScoped<DaoPair>();
@@ -40,8 +42,9 @@ builder.Services.AddScoped<DaoSchedule>();
 builder.Services.AddScoped<DaoFlavor>();
 builder.Services.AddScoped<DaoUser>();
 builder.Services.AddScoped<DaoSwap>();
-builder.Services.AddScoped<DaoPurchase>();
 builder.Services.AddScoped<DaoUserAchievement>();
+builder.Services.AddScoped<DaoAchievement>();
+builder.Services.AddScoped<DaoFlavorVote>();
 
 // CN
 builder.Services.AddScoped<CnPair>();
@@ -51,16 +54,32 @@ builder.Services.AddScoped<CnFlavor>();
 builder.Services.AddScoped<CnLogin>();
 builder.Services.AddScoped<CnUser>();
 builder.Services.AddScoped<CnSwap>();
-builder.Services.AddScoped<CnPurchase>();
 builder.Services.AddScoped<CnUserAchievement>();
+builder.Services.AddScoped<CnAchievement>();
+builder.Services.AddScoped<CnFlavorVote>();
 
+//Services 
+builder.Services.AddScoped<EmailService>();
 
-// Controllers e JWT Auth
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
+// JWT Auth
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("SendEmailJob", "mail");
 
+    q.AddJob<SendEmailJob>(opts => opts.WithIdentity(jobKey));
 
+    q.AddTrigger(t => t
+        .WithIdentity("Trigger-MonFri-09", "mail")
+        .ForJob(jobKey)
+        .WithCronSchedule("0 0 09 ? * MON,FRI", x =>
+            x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))
+        ));
+
+});
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 builder.Services.AddAuthentication(options =>
 {

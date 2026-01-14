@@ -22,6 +22,25 @@ namespace BakeItCountApi.Cn.Flavors
             return await _context.Flavors.ToListAsync();
         }
 
+        public async Task<List<Flavor>> GetAllFlavorsWithVotesAsync()
+        {
+            var flavorsWithVotes = await _context.Flavors
+                .GroupJoin(
+                    _context.FlavorVotes,
+                    f => f.FlavorId,
+                    v => v.FlavorId,
+                    (f, votes) => new Flavor
+                    {
+                        FlavorId = f.FlavorId,
+                        Name = f.Name,
+                        Votes = votes.Count()
+                    }
+                )
+                .ToListAsync();
+
+            return flavorsWithVotes;
+        }
+
         public async Task<Flavor?> GetMostPurchasedFlavorByUserAsync(int userId)
         {
 

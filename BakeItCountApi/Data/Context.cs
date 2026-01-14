@@ -8,6 +8,7 @@ using BakeItCountApi.Cn.Swaps;
 using BakeItCountApi.Cn.Achievements;
 using Microsoft.EntityFrameworkCore;
 using BakeItCountApi.Data.Seeds;
+using BakeItCountApi.Cn.FlavorVotes;
 
 namespace BakeItCountApi.Data
 {
@@ -22,6 +23,7 @@ namespace BakeItCountApi.Data
         public DbSet<Swap> Swaps { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
         public DbSet<UserAchievement> UserAchievements { get; set; }
+        public DbSet<FlavorVote> FlavorVotes { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options) { }
 
@@ -88,7 +90,13 @@ namespace BakeItCountApi.Data
                 entity.Property(f => f.Name)
                       .IsRequired()
                       .HasMaxLength(100);
+
+                entity.HasMany(f => f.FlavorVotes)
+                        .WithOne(fv => fv.Flavor)
+                        .HasForeignKey(fv => fv.FlavorId)
+                        .OnDelete(DeleteBehavior.Cascade);
             });
+
 
             modelBuilder.Entity<Vote>(entity =>
             {
@@ -154,6 +162,22 @@ namespace BakeItCountApi.Data
             modelBuilder.Entity<Flavor>()
                         .Property(f => f.Category)
                         .HasConversion<string>();
+
+            modelBuilder.Entity<FlavorVote>(entity =>
+            {
+                entity.HasOne(fv => fv.User)
+                      .WithMany()
+                      .HasForeignKey(fv => fv.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(fv => fv.Flavor)
+                      .WithMany()
+                      .HasForeignKey(fv => fv.FlavorId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(fv => fv.VotedAt)
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
 
             AchievementSeed.Seed(modelBuilder);
             FlavorSeed.Seed(modelBuilder);

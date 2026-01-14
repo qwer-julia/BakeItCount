@@ -1,9 +1,7 @@
-﻿using BakeItCountApi.Cn.Schedules;
-using BakeItCountApi.Data;
+﻿using BakeItCountApi.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 
-namespace BakeItCountApi.Dao.Schedules
+namespace BakeItCountApi.Cn.Schedules
 {
     public class DaoSchedule
     {
@@ -26,24 +24,13 @@ namespace BakeItCountApi.Dao.Schedules
             var start = DateTime.SpecifyKind(nextFriday.Date, DateTimeKind.Utc);
             var end = start.AddDays(1);
 
-            try
-            {
-                var nextSchedule = await _context.Schedules
-                    .Include(s => s.Pair)
-                        .ThenInclude(p => p.User1)
-                    .Include(s => s.Pair)
-                        .ThenInclude(p => p.User2)
-                    .Where(s => s.WeekRef >= start && s.WeekRef < end)
-                    .FirstOrDefaultAsync();
-
-                return nextSchedule;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                throw;
-            }
-
+            return await _context.Schedules
+                .Include(s => s.Pair)
+                    .ThenInclude(p => p.User1)
+                .Include(s => s.Pair)
+                    .ThenInclude(p => p.User2)
+                .Where(s => s.WeekRef >= start && s.WeekRef < end)
+                .FirstOrDefaultAsync();
         }
 
         public async Task AddAsync(Schedule schedule)

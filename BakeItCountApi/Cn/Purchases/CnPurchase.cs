@@ -1,5 +1,4 @@
-﻿using BakeItCountApi.Dao.Purchases;
-using BakeItCountApi.Cn.Schedules;
+﻿using BakeItCountApi.Cn.Schedules;
 using BakeItCountApi.Cn.Flavors;
 
 namespace BakeItCountApi.Cn.Purchases

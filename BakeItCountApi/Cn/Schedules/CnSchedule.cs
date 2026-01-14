@@ -1,8 +1,4 @@
 ﻿using BakeItCountApi.Cn.Pairs;
-using BakeItCountApi.Dao.Pairs;
-using BakeItCountApi.Dao.Schedules;
-using BakeItCountApi.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace BakeItCountApi.Cn.Schedules
 {

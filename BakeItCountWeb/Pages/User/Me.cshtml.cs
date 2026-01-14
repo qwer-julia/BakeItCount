@@ -23,8 +23,8 @@ namespace BakeItCountWeb.Pages.User
         public async Task OnGetAsync()
         {
             CurrentUser = await _httpClient.GetFromJsonAsync<UserDto>("auth/me");
-            Pair = await _httpClient.GetFromJsonAsync<PairDto>($"pair/getPairByUserId/{CurrentUser.UserId}");
             UserAchievements = await _httpClient.GetFromJsonAsync<List<AchievementDto>>($"achievement/GetAchievementsByUserId/{CurrentUser.UserId}");
+            Pair = await _httpClient.GetFromJsonAsync<PairDto>($"pair/getPairByUserId/{CurrentUser.UserId}");
             PurchaseList = await _httpClient.GetFromJsonAsync<List<PurchaseDto>>($"purchase/getPurchaseByUserId/{CurrentUser.UserId}");
             FavoriteFlavor = await _httpClient.GetFromJsonAsync<FlavorDto>($"flavor/favoriteFlavor/{CurrentUser.UserId}");
         }

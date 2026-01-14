@@ -5,7 +5,7 @@ using BakeItCountApi.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace BakeItCountApi.Dao.Purchases
+namespace BakeItCountApi.Cn.Purchases
 {
     public class DaoPurchase
     {

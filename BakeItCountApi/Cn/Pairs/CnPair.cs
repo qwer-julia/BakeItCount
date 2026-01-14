@@ -1,5 +1,4 @@
-﻿using BakeItCountApi.Dao.Pairs;
-using BakeItCountApi.Cn.Users;
+﻿using BakeItCountApi.Cn.Users;
 using BakeItCountApi.Cn.Schedules;
 
 namespace BakeItCountApi.Cn.Pairs

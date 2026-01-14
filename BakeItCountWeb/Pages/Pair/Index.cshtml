@@ -23,9 +23,8 @@
                     @(i + 1) 
                 </text>
             </svg>
-            <span class="text-cocoa"> @pair.User1.Name & @pair.User2.Name </span>
+            <span class="text-cocoa"> <a class="hover:underline hover:text-mint" href="@($"user/{pair.UserId1}")">@pair.User1.Name</a> &  <a class="hover:underline hover:text-mint" href="@($"user/{pair.UserId2}")"> @pair.User2.Name </a> </span>
             <span class=" text-mint ml-auto"> @pair.PurchasesQuantity</span>
         </li>
     }
-    
 </ul>

@@ -49,6 +49,8 @@ namespace BakeItCountWeb.Pages.Purchase
 
             if (response.IsSuccessStatusCode)
             {
+                var CurrentUser = await _httpClient.GetFromJsonAsync<UserDto>("auth/me");
+                await _httpClient.GetFromJsonAsync<List<AchievementDto>>($"achievement/UpdatePurchaseAchievementsByUserId/{CurrentUser.UserId}");
                 TempData["SuccessMessage"] = "Compra salva com sucesso!";
                 return RedirectToPage("/Schedule/Details", new { id = Purchase.ScheduleId });
             }

@@ -202,6 +202,35 @@ namespace BakeItCountApi.Migrations
                     b.ToTable("UserAchievements");
                 });
 
+            modelBuilder.Entity("BakeItCountApi.Cn.FlavorVotes.FlavorVote", b =>
+                {
+                    b.Property<int>("FlavorVoteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FlavorVoteId"));
+
+                    b.Property<int>("FlavorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("VotedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("FlavorVoteId");
+
+                    b.HasIndex("FlavorId");
+
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FlavorVotes");
+                });
+
             modelBuilder.Entity("BakeItCountApi.Cn.Flavors.Flavor", b =>
                 {
                     b.Property<int>("FlavorId")
@@ -223,9 +252,6 @@ namespace BakeItCountApi.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int>("Votes")
-                        .HasColumnType("integer");
-
                     b.HasKey("FlavorId");
 
                     b.ToTable("Flavors");
@@ -236,352 +262,308 @@ namespace BakeItCountApi.Migrations
                             FlavorId = 1,
                             Category = "Simples",
                             Description = "Massa de fubá com toque de limão siciliano.",
-                            Name = "Fubá com Limão Siciliano",
-                            Votes = 0
+                            Name = "Fubá com Limão Siciliano"
                         },
                         new
                         {
                             FlavorId = 2,
                             Category = "Simples",
                             Description = "Combinação de maçã e castanhas.",
-                            Name = "Maçã com Castanha",
-                            Votes = 0
+                            Name = "Maçã com Castanha"
                         },
                         new
                         {
                             FlavorId = 3,
                             Category = "Simples",
                             Description = "Massa de fubá com pedaços de goiabada.",
-                            Name = "Fubá com Goiabada",
-                            Votes = 0
+                            Name = "Fubá com Goiabada"
                         },
                         new
                         {
                             FlavorId = 4,
                             Category = "Simples",
                             Description = "Clássico bolo de fubá.",
-                            Name = "Fubá",
-                            Votes = 0
+                            Name = "Fubá"
                         },
                         new
                         {
                             FlavorId = 5,
                             Category = "Simples",
                             Description = "Bolo de milho com sabor tradicional.",
-                            Name = "Milho",
-                            Votes = 0
+                            Name = "Milho"
                         },
                         new
                         {
                             FlavorId = 6,
                             Category = "Simples",
                             Description = "Bolo leve com sabor de iogurte.",
-                            Name = "Iogurte",
-                            Votes = 0
+                            Name = "Iogurte"
                         },
                         new
                         {
                             FlavorId = 7,
                             Category = "Simples",
                             Description = "Bolo de fubá com textura cremosa.",
-                            Name = "Fubá Cremoso",
-                            Votes = 0
+                            Name = "Fubá Cremoso"
                         },
                         new
                         {
                             FlavorId = 8,
                             Category = "Simples",
                             Description = "Bolo de cenoura fofinho.",
-                            Name = "Cenoura",
-                            Votes = 0
+                            Name = "Cenoura"
                         },
                         new
                         {
                             FlavorId = 9,
                             Category = "Simples",
                             Description = "Massa de chocolate com granulado.",
-                            Name = "Formigueiro",
-                            Votes = 0
+                            Name = "Formigueiro"
                         },
                         new
                         {
                             FlavorId = 10,
                             Category = "Simples",
                             Description = "Combinação de banana e canela.",
-                            Name = "Banana com Canela",
-                            Votes = 0
+                            Name = "Banana com Canela"
                         },
                         new
                         {
                             FlavorId = 11,
                             Category = "Caro",
                             Description = "Bolo de milho com recheio de requeijão.",
-                            Name = "Milho com Requeijão",
-                            Votes = 0
+                            Name = "Milho com Requeijão"
                         },
                         new
                         {
                             FlavorId = 12,
                             Category = "Caro",
                             Description = "Bolo de cenoura com creme de avelã.",
-                            Name = "Bolo de Cenoura com Creme de Avelã",
-                            Votes = 0
+                            Name = "Bolo de Cenoura com Creme de Avelã"
                         },
                         new
                         {
                             FlavorId = 13,
                             Category = "Caro",
                             Description = "Camadas de bolo de chocolate com leite condensado.",
-                            Name = "Bolo Piscina de Chocolate com Leitinho",
-                            Votes = 0
+                            Name = "Bolo Piscina de Chocolate com Leitinho"
                         },
                         new
                         {
                             FlavorId = 14,
                             Category = "Caro",
                             Description = "Camadas de bolo de milho com curau.",
-                            Name = "Bolo Piscina de Milho com Curau",
-                            Votes = 0
+                            Name = "Bolo Piscina de Milho com Curau"
                         },
                         new
                         {
                             FlavorId = 15,
                             Category = "Caro",
                             Description = "Camadas de bolo de goiabada e queijo.",
-                            Name = "Bolo Piscina Romeu e Julieta",
-                            Votes = 0
+                            Name = "Bolo Piscina Romeu e Julieta"
                         },
                         new
                         {
                             FlavorId = 16,
                             Category = "Simples",
                             Description = "Bolo de cenoura com gotas de chocolate.",
-                            Name = "Cenoura com Gotas de Chocolate",
-                            Votes = 0
+                            Name = "Cenoura com Gotas de Chocolate"
                         },
                         new
                         {
                             FlavorId = 17,
                             Category = "Simples",
                             Description = "Bolo de mandioca com toque de queijo.",
-                            Name = "Mandioca",
-                            Votes = 0
+                            Name = "Mandioca"
                         },
                         new
                         {
                             FlavorId = 18,
                             Category = "Simples",
                             Description = "Bolo de iogurte com limão.",
-                            Name = "Iogurte com Limão",
-                            Votes = 0
+                            Name = "Iogurte com Limão"
                         },
                         new
                         {
                             FlavorId = 19,
                             Category = "Simples",
                             Description = "Massa de fubá com aroma de erva-doce.",
-                            Name = "Fubá com Erva-Doce",
-                            Votes = 0
+                            Name = "Fubá com Erva-Doce"
                         },
                         new
                         {
                             FlavorId = 20,
                             Category = "Simples",
                             Description = "Bolo de chocolate clássico.",
-                            Name = "Chocolate",
-                            Votes = 0
+                            Name = "Chocolate"
                         },
                         new
                         {
                             FlavorId = 21,
                             Category = "Simples",
                             Description = "Bolo com sabor de coco.",
-                            Name = "Coco",
-                            Votes = 0
+                            Name = "Coco"
                         },
                         new
                         {
                             FlavorId = 22,
                             Category = "Simples",
                             Description = "Bolo com sabor de laranja.",
-                            Name = "Laranja",
-                            Votes = 0
+                            Name = "Laranja"
                         },
                         new
                         {
                             FlavorId = 23,
                             Category = "Simples",
                             Description = "Bolo com sabor de limão.",
-                            Name = "Limão",
-                            Votes = 0
+                            Name = "Limão"
                         },
                         new
                         {
                             FlavorId = 24,
                             Category = "Simples",
                             Description = "Bolo com sabor de maracujá.",
-                            Name = "Maracujá",
-                            Votes = 0
+                            Name = "Maracujá"
                         },
                         new
                         {
                             FlavorId = 25,
                             Category = "Simples",
                             Description = "Bolo com mistura de sabores.",
-                            Name = "Mesclado",
-                            Votes = 0
+                            Name = "Mesclado"
                         },
                         new
                         {
                             FlavorId = 26,
                             Category = "Simples",
                             Description = "Bolo fofinho de chocolate.",
-                            Name = "Fofinho Chocolate",
-                            Votes = 0
+                            Name = "Fofinho Chocolate"
                         },
                         new
                         {
                             FlavorId = 27,
                             Category = "Simples",
                             Description = "Bolo fofinho de fubá com laranja.",
-                            Name = "Fofinho Fubá com Laranja",
-                            Votes = 0
+                            Name = "Fofinho Fubá com Laranja"
                         },
                         new
                         {
                             FlavorId = 28,
                             Category = "Caro",
                             Description = "Bolo com sabor de leite condensado.",
-                            Name = "Leitinho",
-                            Votes = 0
+                            Name = "Leitinho"
                         },
                         new
                         {
                             FlavorId = 29,
                             Category = "Caro",
                             Description = "Bolo com coco e chocolate.",
-                            Name = "Prestígio",
-                            Votes = 0
+                            Name = "Prestígio"
                         },
                         new
                         {
                             FlavorId = 30,
                             Category = "Caro",
                             Description = "Bolo com sabor suave e fofinho.",
-                            Name = "Toalha Felpuda",
-                            Votes = 0
+                            Name = "Toalha Felpuda"
                         },
                         new
                         {
                             FlavorId = 31,
                             Category = "Caro",
                             Description = "Bolo com sabor de amendoim.",
-                            Name = "Amendoim",
-                            Votes = 0
+                            Name = "Amendoim"
                         },
                         new
                         {
                             FlavorId = 32,
                             Category = "Caro",
                             Description = "Bolo com damasco, nozes e uvas passas.",
-                            Name = "Amizade",
-                            Votes = 0
+                            Name = "Amizade"
                         },
                         new
                         {
                             FlavorId = 33,
                             Category = "Caro",
                             Description = "Bolo estilo brownie.",
-                            Name = "Browie",
-                            Votes = 0
+                            Name = "Browie"
                         },
                         new
                         {
                             FlavorId = 34,
                             Category = "Caro",
                             Description = "Brownie com pedaços de nozes.",
-                            Name = "Brownie com Nozes",
-                            Votes = 0
+                            Name = "Brownie com Nozes"
                         },
                         new
                         {
                             FlavorId = 35,
                             Category = "Simples",
                             Description = "Bolo com sabor de ameixa.",
-                            Name = "Ameixa",
-                            Votes = 0
+                            Name = "Ameixa"
                         },
                         new
                         {
                             FlavorId = 36,
                             Category = "Simples",
                             Description = "Bolo de trigo simples.",
-                            Name = "Trigo",
-                            Votes = 0
+                            Name = "Trigo"
                         },
                         new
                         {
                             FlavorId = 37,
                             Category = "Simples",
                             Description = "Bolo com pedaços de maçã.",
-                            Name = "Maçã",
-                            Votes = 0
+                            Name = "Maçã"
                         },
                         new
                         {
                             FlavorId = 38,
                             Category = "Simples",
                             Description = "Bolo com sabor de queijo.",
-                            Name = "Queijo",
-                            Votes = 0
+                            Name = "Queijo"
                         },
                         new
                         {
                             FlavorId = 39,
                             Category = "Simples",
                             Description = "Bolo de fubá com crocância e laranja.",
-                            Name = "Crocante Fubá com Laranja",
-                            Votes = 0
+                            Name = "Crocante Fubá com Laranja"
                         },
                         new
                         {
                             FlavorId = 40,
                             Category = "Caro",
                             Description = "Bolo com leite de coco e queijo parmesão.",
-                            Name = "Luiz Felipe",
-                            Votes = 0
+                            Name = "Luiz Felipe"
                         },
                         new
                         {
                             FlavorId = 41,
                             Category = "Caro",
                             Description = "Bolo com coco e queijo.",
-                            Name = "Queijadinha",
-                            Votes = 0
+                            Name = "Queijadinha"
                         },
                         new
                         {
                             FlavorId = 42,
                             Category = "Caro",
                             Description = "Bolo especial para o Natal.",
-                            Name = "Natal",
-                            Votes = 0
+                            Name = "Natal"
                         },
                         new
                         {
                             FlavorId = 43,
                             Category = "Caro",
                             Description = "Bolo com camada de pudim.",
-                            Name = "Bolo Pudim",
-                            Votes = 0
+                            Name = "Bolo Pudim"
                         },
                         new
                         {
                             FlavorId = 44,
                             Category = "Simples",
                             Description = "Bolo com sabor de café.",
-                            Name = "Capuccino",
-                            Votes = 0
+                            Name = "Capuccino"
                         });
                 });
 
@@ -640,9 +622,6 @@ namespace BakeItCountApi.Migrations
                     b.Property<int>("ScheduleId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ScheduleId1")
-                        .HasColumnType("integer");
-
                     b.HasKey("PurchaseId");
 
                     b.HasIndex("Flavor1Id");
@@ -650,8 +629,6 @@ namespace BakeItCountApi.Migrations
                     b.HasIndex("Flavor2Id");
 
                     b.HasIndex("ScheduleId");
-
-                    b.HasIndex("ScheduleId1");
 
                     b.ToTable("Purchases");
                 });
@@ -672,17 +649,12 @@ namespace BakeItCountApi.Migrations
                     b.Property<int>("PairId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("PairId1")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("WeekRef")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ScheduleId");
 
                     b.HasIndex("PairId");
-
-                    b.HasIndex("PairId1");
 
                     b.ToTable("Schedules");
                 });
@@ -804,6 +776,28 @@ namespace BakeItCountApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BakeItCountApi.Cn.FlavorVotes.FlavorVote", b =>
+                {
+                    b.HasOne("BakeItCountApi.Cn.Flavors.Flavor", "Flavor")
+                        .WithMany()
+                        .HasForeignKey("FlavorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BakeItCountApi.Cn.Flavors.Flavor", null)
+                        .WithMany("FlavorVotes");
+
+                    b.HasOne("BakeItCountApi.Cn.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Flavor");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BakeItCountApi.Cn.Pairs.Pair", b =>
                 {
                     b.HasOne("BakeItCountApi.Cn.Users.User", "User1")
@@ -838,14 +832,10 @@ namespace BakeItCountApi.Migrations
                         .IsRequired();
 
                     b.HasOne("BakeItCountApi.Cn.Schedules.Schedule", "Schedule")
-                        .WithMany()
+                        .WithMany("Purchases")
                         .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BakeItCountApi.Cn.Schedules.Schedule", null)
-                        .WithMany("Purchases")
-                        .HasForeignKey("ScheduleId1");
 
                     b.Navigation("Flavor1");
 
@@ -857,14 +847,10 @@ namespace BakeItCountApi.Migrations
             modelBuilder.Entity("BakeItCountApi.Cn.Schedules.Schedule", b =>
                 {
                     b.HasOne("BakeItCountApi.Cn.Pairs.Pair", "Pair")
-                        .WithMany()
+                        .WithMany("Schedules")
                         .HasForeignKey("PairId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BakeItCountApi.Cn.Pairs.Pair", null)
-                        .WithMany("Schedules")
-                        .HasForeignKey("PairId1");
 
                     b.Navigation("Pair");
                 });
@@ -905,6 +891,11 @@ namespace BakeItCountApi.Migrations
                     b.Navigation("Flavor");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BakeItCountApi.Cn.Flavors.Flavor", b =>
+                {
+                    b.Navigation("FlavorVotes");
                 });
 
             modelBuilder.Entity("BakeItCountApi.Cn.Pairs.Pair", b =>

@@ -3,7 +3,7 @@ using BakeItCountApi.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace BakeItCountApi.Dao.Swaps
+namespace BakeItCountApi.Cn.Swaps
 {
     public class DaoSwap
     {
@@ -37,7 +37,9 @@ namespace BakeItCountApi.Dao.Swaps
                 .Include(s => s.SourceSchedule).ThenInclude(sc => sc.Pair).ThenInclude(p => p.User2)
                 .Include(s => s.TargetSchedule).ThenInclude(tc => tc.Pair).ThenInclude(p => p.User1)
                 .Include(s => s.TargetSchedule).ThenInclude(tc => tc.Pair).ThenInclude(p => p.User2)
-                .FirstOrDefaultAsync(s => s.SourceScheduleId == scheduleId);
+                .Where(s => s.SourceScheduleId == scheduleId)
+                .OrderByDescending(s => s.SwapId)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<List<Swap>> GetAllAsync()
