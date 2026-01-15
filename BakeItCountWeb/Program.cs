@@ -4,13 +4,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+var apiUrl = Environment.GetEnvironmentVariable("API_URL")
+    ?? "https://localhost:7211/api/";
+
 builder.Services.AddHttpClient("ApiClient", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7211/api/"); 
-})
-    .AddHttpMessageHandler<TokenHandler>(); 
-;
-
+    client.BaseAddress = new Uri(apiUrl);
+});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<TokenHandler>();
