@@ -10,9 +10,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{CDDD176C-AFAB-498D-B630-F7A80002EBE9}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		.dockerignore = .dockerignore
+		Dockerfile.api = Dockerfile.api
+		Dockerfile.web = Dockerfile.web
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BakeItCountApi.Tests", "BakeItCountApi.Tests\BakeItCountApi.Tests.csproj", "{7B79D810-AD78-41B3-995A-1C4A86D8FD47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BakeItCountApi.Tests", "BakeItCountApi.Tests\BakeItCountApi.Tests.csproj", "{7B79D810-AD78-41B3-995A-1C4A86D8FD47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
