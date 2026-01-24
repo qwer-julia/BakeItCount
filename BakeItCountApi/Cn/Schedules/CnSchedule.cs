@@ -49,20 +49,24 @@ namespace BakeItCountApi.Cn.Schedules
             if (pairs == null || pairs.Count == 0)
                 return;
 
-            var fridays = GetFridays(DateTime.Now, DateTime.Now.AddMonths(3));
+            var start = DateTime.UtcNow.Date;
+            var end = start.AddMonths(3);
+
+            var fridays = GetFridays(start, end);
 
             int index = 0;
             foreach (var friday in fridays)
             {
                 var pair = pairs[index % pairs.Count];
+
                 var schedule = new Schedule
                 {
                     PairId = pair.PairId,
-                    WeekRef = friday.ToUniversalTime(),
+                    WeekRef = friday, // já UTC
                     Confirmed = false
                 };
-                await _scheduleDAO.AddAsync(schedule);
 
+                await _scheduleDAO.AddAsync(schedule);
                 index++;
             }
         }

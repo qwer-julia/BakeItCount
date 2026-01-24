@@ -9,13 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BakeItCountWeb", "BakeItCou
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{CDDD176C-AFAB-498D-B630-F7A80002EBE9}"
 	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
 		.dockerignore = .dockerignore
+		.gitignore = .gitignore
 		Dockerfile.api = Dockerfile.api
 		Dockerfile.web = Dockerfile.web
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BakeItCountApi.Tests", "BakeItCountApi.Tests\BakeItCountApi.Tests.csproj", "{7B79D810-AD78-41B3-995A-1C4A86D8FD47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +29,6 @@ Global
 		{40C08DD7-FC39-4954-B437-C5B89898128B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40C08DD7-FC39-4954-B437-C5B89898128B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40C08DD7-FC39-4954-B437-C5B89898128B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B79D810-AD78-41B3-995A-1C4A86D8FD47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B79D810-AD78-41B3-995A-1C4A86D8FD47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B79D810-AD78-41B3-995A-1C4A86D8FD47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B79D810-AD78-41B3-995A-1C4A86D8FD47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

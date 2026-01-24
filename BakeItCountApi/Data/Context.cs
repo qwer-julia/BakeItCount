@@ -25,7 +25,7 @@ namespace BakeItCountApi.Data
         public DbSet<UserAchievement> UserAchievements { get; set; }
         public DbSet<FlavorVote> FlavorVotes { get; set; }
 
-        public Context(DbContextOptions<Context> options) : base(options) { }
+        public Context(DbContextOptions<Context> options) : base(options) {  }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

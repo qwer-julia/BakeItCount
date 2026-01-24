@@ -15,12 +15,12 @@ namespace BakeItCountWeb.Pages.Home
         }
 
         [BindProperty]
-        [Required(ErrorMessage = "O e-mail é obrigatório")]
-        [EmailAddress(ErrorMessage = "Informe um e-mail válido")]
+        [Required(ErrorMessage = "O e-mail ï¿½ obrigatï¿½rio")]
+        [EmailAddress(ErrorMessage = "Informe um e-mail vï¿½lido")]
         public string Email { get; set; }
 
         [BindProperty]
-        [Required(ErrorMessage = "A senha é obrigatória")]
+        [Required(ErrorMessage = "A senha ï¿½ obrigatï¿½ria")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         public string ErrorMessage { get; set; }
@@ -48,7 +48,21 @@ namespace BakeItCountWeb.Pages.Home
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                    var content = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrEmpty(content))
+                    {
+                        ErrorMessage = "Resposta vazia da API";
+                        return Page();
+                    }
+
+                    var result = System.Text.Json.JsonSerializer.Deserialize<LoginResponse>(content,
+                        new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    if (result?.Token == null)
+                    {
+                        ErrorMessage = "Token nÃ£o retornado pela API";
+                        return Page();
+                    }
 
                     Response.Cookies.Append("AuthToken", result.Token, new CookieOptions
                     {
@@ -58,16 +72,16 @@ namespace BakeItCountWeb.Pages.Home
                         Expires = DateTime.UtcNow.AddDays(1)
                     });
                     return RedirectToPage("/Home/Authenticated");
-
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    ErrorMessage = "Usuário ou senha inválidos.";
+                    ErrorMessage = "Usuï¿½rio ou senha invï¿½lidos.";
                     return Page();
                 }
                 else
                 {
-                    ErrorMessage = "Erro inesperado ao tentar logar.";
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    ErrorMessage = $"Erro: {response.StatusCode} - {errorContent}";
                     return Page();
                 }
 

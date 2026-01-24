@@ -66,6 +66,10 @@ namespace BakeItCountApi.Controller
             {
                 return Unauthorized(ex.Message);
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro: {ex.Message}");
+            }
         }
 
         [HttpGet("me")]
