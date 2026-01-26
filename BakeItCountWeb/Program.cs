@@ -1,41 +1,36 @@
 using BakeItCountWeb.Services;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorPages();
 
-// Detecta o ambiente
-var isProduction = builder.Environment.IsProduction();
-var isRender = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("RENDER"));
-
-// Configura a URL da API
-string apiUrl;
-
-if (isProduction || isRender)
-{
-    var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
-    apiUrl = $"http://localhost:{port}/api/";
-
-    Console.WriteLine($"[PRODUÇÃO] Usando API em: {apiUrl}");
-}
-else
-{
-    apiUrl = builder.Configuration["ApiSettings:BaseUrl"]
-             ?? Environment.GetEnvironmentVariable("API_URL")
+var apiUrl = Environment.GetEnvironmentVariable("API_URL")
+             ?? builder.Configuration["ApiSettings:BaseUrl"]
              ?? "https://localhost:7211/api/";
 
-    Console.WriteLine($"[DESENVOLVIMENTO] Usando API em: {apiUrl}");
-}
+Console.WriteLine($"API URL configurada: {apiUrl}");
 
 builder.Services.AddHttpClient("ApiClient", client =>
 {
     client.BaseAddress = new Uri(apiUrl);
-    client.Timeout = TimeSpan.FromSeconds(30);
+    client.Timeout = TimeSpan.FromSeconds(60);
 
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-    client.DefaultRequestHeaders.Add("User-Agent", "BakeItCountWeb/1.0");
-});
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; BakeItCountWeb/1.0)");
+    client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
+    client.DefaultRequestHeaders.Add("Pragma", "no-cache");
+    client.DefaultRequestHeaders.ConnectionClose = false;
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    AllowAutoRedirect = true,
+    MaxAutomaticRedirections = 3,
+    UseCookies = false,
+    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+})
+.SetHandlerLifetime(TimeSpan.FromMinutes(5));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<TokenHandler>();
@@ -47,8 +42,6 @@ var logger = app.Services.GetRequiredService<ILogger<Program>>();
 logger.LogInformation("=== CONFIGURAÇÃO DA APLICAÇÃO ===");
 logger.LogInformation($"Environment: {app.Environment.EnvironmentName}");
 logger.LogInformation($"API URL: {apiUrl}");
-logger.LogInformation($"Is Render: {isRender}");
-logger.LogInformation($"PORT: {Environment.GetEnvironmentVariable("PORT")}");
 logger.LogInformation("===================================");
 
 if (!app.Environment.IsDevelopment())
