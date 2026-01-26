@@ -1,4 +1,4 @@
-using BakeItCountApi.Data;
+﻿using BakeItCountApi.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,21 +19,50 @@ using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.WriteIndented = true; // opcional
+        options.JsonSerializerOptions.WriteIndented = true;
     });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+string connectionString;
+
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    Console.WriteLine($"DATABASE_URL encontrada: {databaseUrl.Substring(0, Math.Min(50, databaseUrl.Length))}...");
+    
+    try
+    {
+        var uri = new Uri(databaseUrl);
+        var userInfo = uri.UserInfo.Split(':');
+        
+        connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+        
+        Console.WriteLine("Connection string convertida com sucesso");
+        Console.WriteLine($"Host: {uri.Host}");
+        Console.WriteLine($"Database: {uri.AbsolutePath.TrimStart('/')}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Erro ao converter DATABASE_URL: {ex.Message}");
+        connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    }
+}
+else
+{
+    Console.WriteLine("DATABASE_URL não encontrada, usando appsettings.json");
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+}
+
+Console.WriteLine($"Connection String final: {connectionString?.Substring(0, Math.Min(80, connectionString?.Length ?? 0))}...");
 
 builder.Services.AddEntityFrameworkNpgsql()
     .AddDbContext<Context>(options =>
-    options.UseNpgsql(connectionString));
+        options.UseNpgsql(connectionString));
 
 // DAO
 builder.Services.AddScoped<DaoPair>();
@@ -58,7 +87,7 @@ builder.Services.AddScoped<CnUserAchievement>();
 builder.Services.AddScoped<CnAchievement>();
 builder.Services.AddScoped<CnFlavorVote>();
 
-//Services 
+// Services 
 builder.Services.AddScoped<EmailService>();
 
 // JWT Auth
@@ -75,8 +104,8 @@ builder.Services.AddQuartz(q =>
         .WithCronSchedule("0 0 09 ? * MON,FRI", x =>
             x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))
         ));
-
 });
+
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
@@ -118,7 +147,7 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
 }
