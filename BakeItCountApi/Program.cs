@@ -16,6 +16,7 @@ using BakeItCountApi.Cn.FlavorVotes;
 using BakeItCountApi.Models;
 using BakeItCountApi.Services;
 using Quartz;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,41 +29,66 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 
-var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+// ===== CONFIGURAÇÃO DA CONNECTION STRING =====
 string connectionString;
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+var configConnectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    Console.WriteLine($"DATABASE_URL encontrada: {databaseUrl.Substring(0, Math.Min(50, databaseUrl.Length))}...");
-    
+    Console.WriteLine("Usando DATABASE_URL do ambiente");
+
     try
     {
         var uri = new Uri(databaseUrl);
-        var userInfo = uri.UserInfo.Split(':');
-        
-        connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
-        
-        Console.WriteLine("Connection string convertida com sucesso");
-        Console.WriteLine($"Host: {uri.Host}");
-        Console.WriteLine($"Database: {uri.AbsolutePath.TrimStart('/')}");
+        var credentials = uri.UserInfo.Split(':');
+
+        var connBuilder = new NpgsqlConnectionStringBuilder
+        {
+            Host = uri.Host,
+            Port = uri.Port > 0 ? uri.Port : 5432,
+            Database = uri.AbsolutePath.TrimStart('/').Split('?')[0],
+            Username = credentials[0],
+            Password = credentials[1],
+            SslMode = SslMode.Require,
+            TrustServerCertificate = true,
+            Pooling = true,
+            MaxPoolSize = 20,
+            MinPoolSize = 5,
+            ConnectionIdleLifetime = 300
+        };
+
+        connectionString = connBuilder.ConnectionString;
+        Console.WriteLine($"✅ Conectando ao PostgreSQL: {connBuilder.Host}:{connBuilder.Port}/{connBuilder.Database}");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Erro ao converter DATABASE_URL: {ex.Message}");
-        connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        Console.WriteLine($"❌ Erro ao processar DATABASE_URL: {ex.Message}");
+        connectionString = configConnectionString;
     }
+}
+else if (!string.IsNullOrEmpty(configConnectionString))
+{
+    Console.WriteLine("Usando ConnectionString do appsettings");
+    connectionString = configConnectionString;
 }
 else
 {
-    Console.WriteLine("DATABASE_URL não encontrada, usando appsettings.json");
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    throw new InvalidOperationException("Nenhuma connection string configurada!");
 }
-
-Console.WriteLine($"Connection String final: {connectionString?.Substring(0, Math.Min(80, connectionString?.Length ?? 0))}...");
+// ===== FIM DA CONFIGURAÇÃO =====
 
 builder.Services.AddEntityFrameworkNpgsql()
     .AddDbContext<Context>(options =>
-        options.UseNpgsql(connectionString));
+    {
+        options.UseNpgsql(connectionString);
+        if (builder.Environment.IsDevelopment())
+        {
+            options.EnableSensitiveDataLogging();
+            options.EnableDetailedErrors();
+        }
+    });
 
 // DAO
 builder.Services.AddScoped<DaoPair>();
@@ -95,9 +121,7 @@ builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"
 builder.Services.AddQuartz(q =>
 {
     var jobKey = new JobKey("SendEmailJob", "mail");
-
     q.AddJob<SendEmailJob>(opts => opts.WithIdentity(jobKey));
-
     q.AddTrigger(t => t
         .WithIdentity("Trigger-MonFri-09", "mail")
         .ForJob(jobKey)
@@ -105,8 +129,6 @@ builder.Services.AddQuartz(q =>
             x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"))
         ));
 });
-
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
@@ -128,7 +150,7 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 
     options.Events = new JwtBearerEvents
@@ -147,16 +169,24 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-
-if (app.Environment.IsDevelopment())
+// Teste de conexão
+using (var scope = app.Services.CreateScope())
 {
+    try
+    {
+        var context = scope.ServiceProvider.GetRequiredService<Context>();
+        await context.Database.CanConnectAsync();
+        Console.WriteLine("✅ Conexão com banco estabelecida");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Falha ao conectar: {ex.Message}");
+    }
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
