@@ -316,7 +316,6 @@
     </form>
 </div>
 
-<!-- Overlay de Sucesso -->
 <div id="successOverlay" class="success-overlay">
     <div class="success-circle" id="successCircle">
         <div class="icon-container">
@@ -337,25 +336,21 @@
         const circle = document.getElementById('successCircle');
 
         form.addEventListener('submit', function(e) {
-            // Validação básica
             const flavor1 = document.getElementById('Flavor1Id').value;
             const flavor2 = document.getElementById('Flavor2Id').value;
             
             if (!flavor1 || !flavor2) {
-                return; // Deixa o form validar normalmente
+                return;
             }
 
-            // Se passou na validação, mostra animação
             e.preventDefault();
             
             overlay.classList.add('active');
             
-            // Adiciona classe de slide após as animações de empacotamento
             setTimeout(() => {
                 circle.classList.add('slide-out');
             }, 2800);
 
-            // Submete o form após todas as animações
             setTimeout(() => {
                 form.submit();
             }, 4300);

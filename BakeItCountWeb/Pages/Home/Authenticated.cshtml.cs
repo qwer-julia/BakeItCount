@@ -36,7 +36,6 @@ namespace BakeItCountWeb.Pages.Home
             {
                 _logger.LogInformation("=== Iniciando carregamento da página Authenticated ===");
 
-                // Verifica e valida o token PRIMEIRO
                 if (!Request.Cookies.TryGetValue("AuthToken", out var token))
                 {
                     _logger.LogWarning("Token não encontrado nos cookies");
@@ -62,17 +61,14 @@ namespace BakeItCountWeb.Pages.Home
                     return RedirectToPage("/Home/Login");
                 }
 
-                // ADICIONA O TOKEN NO HEADER DO HTTPCLIENT
                 _httpClient.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", token);
 
                 _logger.LogInformation("Buscando dados do usuário...");
 
-                // Busca dados do usuário atual
                 CurrentUser = await _httpClient.GetFromJsonAsync<UserDto>("auth/me");
                 _logger.LogInformation($"Usuário carregado: {CurrentUser?.Name}");
 
-                // Busca próximo schedule
                 _logger.LogInformation("Buscando próximo schedule...");
                 NextSchedule = await _httpClient.GetFromJsonAsync<ScheduleDto>("schedule/next");
 
@@ -85,23 +81,19 @@ namespace BakeItCountWeb.Pages.Home
 
                 _logger.LogInformation($"Schedule carregado: {NextSchedule.ScheduleId}");
 
-                // Busca Purchase
                 _logger.LogInformation("Buscando purchase...");
                 PurchaseId = await _httpClient.GetFromJsonAsync<int>($"purchase/getPurchaseByScheduleId/{NextSchedule.ScheduleId}");
                 _logger.LogInformation($"Purchase ID: {PurchaseId}");
 
-                // Busca Pair
                 _logger.LogInformation("Buscando pair...");
                 Pair = await _httpClient.GetFromJsonAsync<PairDto>($"pair/{NextSchedule.PairId}");
                 _logger.LogInformation($"Pair carregado: {Pair?.PairId}");
 
-                // Busca usuários do pair
                 _logger.LogInformation("Buscando usuários do pair...");
                 PairUser1 = await _httpClient.GetFromJsonAsync<UserDto>($"user/{Pair.UserId1}");
                 PairUser2 = await _httpClient.GetFromJsonAsync<UserDto>($"user/{Pair.UserId2}");
                 _logger.LogInformation($"Usuários carregados: {PairUser1?.Name}, {PairUser2?.Name}");
 
-                // Busca SwapRequest (pode ser null)
                 _logger.LogInformation("Buscando swap request...");
                 try
                 {
@@ -113,7 +105,6 @@ namespace BakeItCountWeb.Pages.Home
                     SwapRequest = null;
                 }
 
-                // Busca sabores
                 _logger.LogInformation("Buscando sabores...");
                 Flavors = (await _httpClient.GetFromJsonAsync<List<FlavorDto>>("flavor/allWithFlavors"))
                     ?.OrderByDescending(f => f.Votes)
@@ -130,7 +121,6 @@ namespace BakeItCountWeb.Pages.Home
                 _logger.LogError(ex, $"Erro HTTP ao carregar dados. Status: {ex.StatusCode}");
                 TempData["ErrorMessage"] = $"Erro ao carregar dados: {ex.Message}";
 
-                // Se for 401, redireciona para login
                 if (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     return RedirectToPage("/Home/Login");
@@ -152,7 +142,6 @@ namespace BakeItCountWeb.Pages.Home
             {
                 _logger.LogInformation($"Confirmando schedule: {scheduleId}");
 
-                // Adiciona token no header
                 if (Request.Cookies.TryGetValue("AuthToken", out var token))
                 {
                     _httpClient.DefaultRequestHeaders.Authorization =

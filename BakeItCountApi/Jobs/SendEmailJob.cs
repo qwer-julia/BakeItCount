@@ -21,18 +21,14 @@ public class SendEmailJob : IJob
             _logger.LogInformation("Hoje é {Day}. Preparando para enviar e-mail.", today);
             try
             {
-                await _emailService.SendEmailAsync("destinatario@exemplo.com",
-                    "Relatório Automático", "Conteúdo do e-mail...");
+                await _emailService.SendEmailAsync("",
+                    "Essa semana o bolo é seu!", "Entre no site para confirmar ou solicitar uma troca.");
                 _logger.LogInformation("E-mail enviado com sucesso.");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Falha ao enviar e-mail");
             }
-        }
-        else
-        {
-            _logger.LogInformation("Hoje ({Day}) não é segunda nem sexta — job finaliza sem ação.", today);
         }
     }
 }

@@ -5,7 +5,6 @@
 <div class="mx-auto my-6 md:my-10 px-4 md:px-0">
     <h1 class="font-bungeeInline text-4xl md:text-6xl text-left text-cocoa mb-6 md:mb-10"> Histórico </h1>
 
-    <!-- Desktop Table -->
     <div class="hidden md:block border-3 border-cocoa rounded-xl max-w-2xl lg:max-w-4xl my-10">
         <table class="w-full mx-auto border-2 border-cocoa rounded-xl overflow-hidden text-cocoa">
             <thead class="bg-opacity-10 font-bold" style="background-color: rgba(92,64,51,0.06);">
@@ -36,7 +35,6 @@
         </table>
     </div>
 
-    <!-- Mobile Cards -->
     <div class="md:hidden flex flex-col gap-4">
         @foreach (var purchase in Model.PurchasesList)
         {

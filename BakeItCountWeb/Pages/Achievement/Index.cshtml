@@ -3,25 +3,25 @@
 @{
 }
 
-<h1 class="text-6xl font-bungeeInline text-cocoa">CONQUISTAS</h1>
-<div class="grid grid-cols-2 gap-4 my-4">
-    @foreach (var achievement in Model.AchievementList)
-    {
-        <div class="p-14 border-3 border-cocoa shadow-solid-cocoa rounded-2xl max-w-2xl my-4">
-            <h1 class="text-6xl font-bungeeInline text-cocoa">@achievement.Name</h1>
+<div class="px-4 md:px-0">
+    <h1 class="text-4xl md:text-6xl font-bungeeInline text-cocoa">CONQUISTAS</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+        @foreach (var achievement in Model.AchievementList)
+        {
+            <div class="p-6 md:p-14 border-3 border-cocoa shadow-solid-cocoa rounded-2xl max-w-2xl my-2 md:my-4">
+                <h1 class="text-3xl md:text-6xl font-bungeeInline text-cocoa break-words">@achievement.Name</h1>
 
-            <span class="my-2 font-bold text-2xl font-bungee flex text-peach">
-                @achievement.Description
-            </span>
-
-            <p class="my-10">
-                <h1 class="text-2xl font-bungee text-cocoa">REQUISITO</h1>
-
-                <span class="my-2 font-bold text-4xl font-bungee flex text-cocoa gap-2">
-                    @achievement.Criteria
+                <span class="my-2 font-bold text-lg md:text-2xl font-bungee flex text-peach">
+                    @achievement.Description
                 </span>
-            </p>
-        </div>
-    }
 
+                <div class="my-6 md:my-10">
+                    <h2 class="text-xl md:text-2xl font-bungee text-cocoa">REQUISITO</h2>
+                    <span class="my-2 font-bold text-2xl md:text-4xl font-bungee flex text-cocoa gap-2 break-words">
+                        @achievement.Criteria
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
 </div>

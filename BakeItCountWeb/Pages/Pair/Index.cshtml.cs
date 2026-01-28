@@ -16,7 +16,6 @@ namespace BakeItCountWeb.Pages.Pair
         public async Task OnGet()
         {
             PairList = await _httpClient.GetFromJsonAsync<List<PairDto>>("pair/GetAllPairsWithPurchase");
-            // PairList = await _httpClient.GetFromJsonAsync<List<PairDto>>("pair/GetAllPairsWithPurchase");
         }
     }
 }

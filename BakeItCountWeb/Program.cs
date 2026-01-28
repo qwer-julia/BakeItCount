@@ -11,6 +11,9 @@ var apiUrl = Environment.GetEnvironmentVariable("API_URL")
 
 Console.WriteLine($"API URL configurada: {apiUrl}");
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<TokenHandler>();
+
 builder.Services.AddHttpClient("ApiClient", client =>
 {
     client.BaseAddress = new Uri(apiUrl);
@@ -30,16 +33,15 @@ builder.Services.AddHttpClient("ApiClient", client =>
     UseCookies = false,
     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 })
+.AddHttpMessageHandler<TokenHandler>()
 .SetHandlerLifetime(TimeSpan.FromMinutes(5));
 
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<TokenHandler>();
 builder.Services.AddScoped<CurrentUserService>();
 
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
-logger.LogInformation("=== CONFIGURAÇÃO DA APLICAÇÃO ===");
+logger.LogInformation("=== CONFIGURAï¿½ï¿½O DA APLICAï¿½ï¿½O ===");
 logger.LogInformation($"Environment: {app.Environment.EnvironmentName}");
 logger.LogInformation($"API URL: {apiUrl}");
 logger.LogInformation("===================================");
